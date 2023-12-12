@@ -1,0 +1,12 @@
+ID_Klienta;Imie;Nazwisko;Miasto;Ulica_numer;Email
+1;Jan;Kowalski;Warszawa;Kwiatowa_7;jan.kowalski@email.com
+2;Anna;Nowak;Kraków;Słoneczna_15;anna.nowak@email.com
+3;Piotr;Wiśniewski;Wrocław;Leśna_22;piotr.wisniewski@email.com
+4;Ewa;Dąbrowska;Gdańsk;Ratuszowy_5;ewa.dabrowska@email.com
+5;Krzysztof;Jankowski;Poznań;Morska_12;krzysztof.jankowski@email.com
+6;Agnieszka;Kaczmarek;Łódź;Kwiatowa_3;agnieszka.kaczmarek@email.com
+7;Grzegorz;Nowicki;Lublin;Różana_8;grzegorz.nowicki@email.com
+8;Maria;Wojciechowska;Szczecin;Słowiański_2;maria.wojciechowska@email.com
+9;Marcin;Szymański;Katowice;Polna_11;marcin.szymanski@email.com
+10;Zofia;Kowalczyk;Bydgoszcz;Zielona_4;zofia.kowalczyk@email.com
+

@@ -1,0 +1,11 @@
+ID_Kategorii;Nazwa
+1;Laptopy
+2;Smartfony
+3;Myszki
+4;Słuchawki
+5;Kamerki
+6;Telewizory
+7;Moniotory
+8;Smartwatche
+9;Głośniki
+10;Klawiatury
