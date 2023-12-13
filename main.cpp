@@ -40,8 +40,7 @@ int main() {
         // Wyczyść bufor wejścia
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
     } while (wybor != 7);
-
+    std::cout<<"Krystian Dziala";
     return 0;
 }
