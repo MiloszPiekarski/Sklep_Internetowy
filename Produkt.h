@@ -7,14 +7,17 @@
 
 
 class Produkt {
+protected:
     int Id_Produktu;
     int Id_Kategorii;
-    string Nazwa;
+    std::string Nazwa;
     float Cena;
     int Dostepnosc;
 
 public:
-    Produkt();
+    Produkt(){
+
+    };
 };
 
 
