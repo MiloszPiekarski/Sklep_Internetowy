@@ -6,6 +6,8 @@
 #define PROJEKT_PRODUKT_H
 
 
+#include <string>
+
 class Produkt {
 protected:
     int Id_Produktu;
@@ -15,9 +17,8 @@ protected:
     int Dostepnosc;
 
 public:
-    Produkt(){
-
-    };
+    virtual void wypisz();
+    Produkt();
 };
 
 

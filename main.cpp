@@ -1,8 +1,12 @@
 #include <iostream>
 #include <limits>
 #include "functions.h"
+#include <locale>
+#include <codecvt>
+
 
 int main() {
+
     int wybor;
 
     do {

@@ -9,3 +9,8 @@ Produkt::Produkt()
 {
     cout << "Utworzono obiekt Produkt!" << endl;
 }
+
+void Produkt::wypisz()
+{
+    cout << Id_Produktu << "\t" << Nazwa << "\t" << Cena << "\t" << Dostepnosc << endl;
+}
