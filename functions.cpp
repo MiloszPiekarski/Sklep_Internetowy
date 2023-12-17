@@ -5,6 +5,7 @@
 #include "vector"
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -88,10 +89,26 @@ void menuPrzegladaniaProduktow() {
                 break;
             case 2:
                 {
-                    std::cout << "Sortowanie produktów...\n";
+                    std::cout << "Sortowanie produktow...\n";
                     fstream file = OpenFile("produkty.txt");
                     string line, elementy[6];
                     getline(file, line);
+
+                    vector<string> Headers = split(line,';');
+
+                    int wybor = -1;
+                    while(wybor < 1 || wybor > Headers.size())
+                    {
+                        cout << "Filtruj wedlug kategorii: " << endl;
+                        for(int i = 2; i < Headers.size(); i++)
+                        {
+                            cout << (i - 1) << ". " << Headers[i] << endl;
+                        }
+                        cin >> wybor;
+                    }
+                    wybor++;
+
+                    vector<vector<string>> allProducts;
 
                     cout << "ID" << setw( 20 ) << "| Nazwa\t\t\t\t\t\t| Cena\t\t| Dostepnosc\t| Dodatkowe informacje" << endl;
                     while(getline(file, line))
@@ -112,6 +129,28 @@ void menuPrzegladaniaProduktow() {
                         {
                             product[2] += " ";
                         }
+                        allProducts.push_back(product);
+                    }
+                    if(wybor == 4 || wybor == 4)
+                    {
+                        sort(allProducts.begin(), allProducts.end(),
+                             [wybor](const std::vector<string>& a, const std::vector<string>& b) {
+                                 return stoi(a[wybor]) < stoi(b[wybor]);
+                             });
+                    }
+                    else
+                    {
+                        sort(allProducts.begin(), allProducts.end(),
+                             [wybor](const std::vector<string>& a, const std::vector<string>& b) {
+                                 return a[wybor] < b[wybor];
+                             });
+                    }
+
+
+                    for(int i = 0; i < allProducts.size(); i++)
+                    {
+                        cout << allProducts[i][0] << " | " << allProducts[i][2]  << " | " << allProducts[i][3]  << " \t| " << allProducts[i][4]  << " \t\t| " << allProducts[i][5] << endl;
+
                     }
 
                     file.close();
