@@ -1,6 +1,7 @@
 ID_Produktu;ID_Kategorii;Nazwa;Cena;Dostępność;Cecha
+0;0;Sprężone powietrze;25.00;20;Brak
 1;1;Laptop Dell XPS 13;4500.00;20;Outlet
-2;1;Laptop HP Spectre x360;3800.00;15:Nowy
+2;1;Laptop HP Spectre x360;3800.00;15;Nowy
 3;2;iPhone 13 Pro;4999.00;30;Outlet
 4;2;Samsung Galaxy S21;3499.00;25;Outlet
 5;3;Mysz bezprzewodowa Logitech MX Master 3;99.99;50;Laserowa

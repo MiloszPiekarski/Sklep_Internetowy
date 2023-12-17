@@ -1,4 +1,5 @@
 ID_Kategorii;Nazwa
+0;Produkt
 1;Laptopy
 2;Smartfony
 3;Myszki

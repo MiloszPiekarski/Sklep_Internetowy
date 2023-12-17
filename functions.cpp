@@ -1,5 +1,31 @@
 #include <iostream>
 #include "functions.h"
+#include "fstream"
+#include "cstring"
+#include "vector"
+#include <sstream>
+#include <iomanip>
+
+using namespace std;
+
+fstream OpenFile(string path)
+{
+    string fullPath = "..\\dane\\" + path;
+    fstream file;
+    file.open(fullPath);
+    return file;
+}
+vector<string> split(const string &s, char delim) {
+    vector<std::string> result;
+    stringstream ss (s);
+    string item;
+
+    while (getline (ss, item, delim)) {
+        result.push_back (item);
+    }
+
+    return result;
+}
 
 void wyswietlMenuGlowne() {
     std::cout << "Menu Główne:\n";
@@ -26,8 +52,45 @@ void menuPrzegladaniaProduktow() {
 
         switch (wybor) {
             case 1:
-                std::cout << "Wyświetlanie wszystkich produktów...\n";
-                // kod
+                {
+                    std::cout << "Wyświetlanie wszystkich produktów...\n";
+                    fstream file = OpenFile("produkty.txt");
+                    string line, elementy[6];
+                    getline(file, line);
+
+                    cout << "ID" << setw( 20 ) << "| Nazwa\t\t\t\t\t\t| Cena\t\t| Dostepnosc\t| Dodatkowe informacje" << endl;
+                    while(getline(file, line))
+                    {
+                        vector<string> product = split(line, ';');
+                        // wyplenienie bialymi znakami w celu schludniejszego wyswieltenia w konsoli
+                        int len = product[2].length();
+                        int n = 0;
+                        if(stoi(product[0]) < 10)
+                        {
+                            n = 51;
+                        }
+                        else
+                        {
+                            n = 50;
+                        }
+                        for(int j = len; j < n; j++)
+                        {
+                            product[2] += " ";
+                        }
+
+                        //wypisywanie
+                        for (int i = 0; i < product.size(); i++)
+                        {
+                            if(i == 1)
+                            {
+                                break;
+                            }
+                            cout << product[0] << " | " << product[2]  << " | " << product[3]  << " \t| " << product[4]  << " \t\t| " << product[5] << endl;
+                        }
+                    }
+
+                    file.close();
+                }
                 break;
             case 2:
                 std::cout << "Sortowanie produktów...\n";
