@@ -1,0 +1,3 @@
+/home/milosz/Miłosz/studia/cpp/projekt/git2/cmake-build-debug/CMakeFiles/projekt.dir
+/home/milosz/Miłosz/studia/cpp/projekt/git2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/milosz/Miłosz/studia/cpp/projekt/git2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
