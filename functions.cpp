@@ -5,6 +5,8 @@
 #include "vector"
 #include <sstream>
 #include <iomanip>
+#include <ctime>
+#include <map>
 #include <algorithm>
 
 using namespace std;
@@ -300,7 +302,43 @@ void menuUsuwanieProduktu() {
         std::cout << "\n\n";
     } while (wybor != 2);
 }
+class data{
+private:
+    int dzien,miesiac,rok;
+public:
+    data(){
+        time_t tim = time(0);
+        tm *mytime = localtime(&tim);
+        dzien = mytime->tm_mday;
+        miesiac = mytime->tm_mon;
+        rok = mytime->tm_year;
+    }
+    data(std::string dana){
 
+    }
+};
+bool sprawdz_date(int wybor){
+
+}
+struct pozycje{
+    int ilosc;
+    int cena;
+};
+void wyszukaj_zamowienia(std::map<int,pozycje> lista_produktow){
+
+    fstream plik = OpenFile("zamowienia.txt");
+    std::string linia;
+    while(getline(plik,linia)){
+        vector<string> produkt = split(linia,';');
+
+    }
+
+}
+std::string raport(int wybor){
+    std::string raport_do_zwrotu = "";
+    std::map<int,pozycje> lista_produktow;
+
+}
 void menuGenerowaniaRaportu() {
     int wybor;
     do {
@@ -311,10 +349,21 @@ void menuGenerowaniaRaportu() {
         std::cin >> wybor;
 
         switch (wybor) {
-            case 1:
-                std::cout << "Wybieranie zakresu czasowego dla raportu...\n";
-                // kod
+            case 1: {
+                system("cls");
+                int wybor_terminu;
+                std::cout<<"Wybierz zakres, dla ktorego chcesz wygenerowac raport ";
+                std::cout << "1. Tydzien\n";
+                std::cout << "2. Miesiac\n";
+                std::cout << "3. Rok\n";
+                std::cin>>wybor_terminu;
+                while(wybor_terminu<1 || wybor_terminu>3){
+                    std::cout<<"Nieprawidlowy wybor. Prosze wybrac licze od 1 do 3";
+                    std::cin>>wybor_terminu;
+                }
+                std::string raport_do_zapisu = raport(wybor_terminu);
                 break;
+            }
             case 2:
                 break; // Powrót do menu głównego
             default:
