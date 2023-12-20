@@ -6,6 +6,7 @@
 #define PROJEKT_SPRZETELEKTRONICZNY_H
 
 #include "iostream"
+using namespace std;
 
 class SprzetElektroniczny {
 protected:
@@ -15,7 +16,7 @@ protected:
         int Id_Kategorii;
     };
     Id IDs;
-    std::string Nazwa;
+    string Nazwa;
 public:
     virtual void wypisz() = 0; // Metoda czysto wirtualna
 };
