@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include "clocale"
 
 using namespace std;
 
@@ -57,14 +58,14 @@ void menuPrzegladaniaProduktow() {
                 {
                     std::cout << "Wyświetlanie wszystkich produktów...\n";
                     fstream file = OpenFile("produkty.txt");
-                    string line, elementy[6];
+                    string line;
                     getline(file, line);
 
-                    cout << "ID" << " | Nazwa\t\t\t\t\t\t| Cena\t\t| Dostepnosc\t| Dodatkowe informacje" << endl;
+                    cout << "ID" << "| Nazwa" << setw(123) <<" | Cena \t | Dostepnosc \t| Dodatkowe informacje\n" << endl;
                     while(getline(file, line))
                     {
                         vector<string> productV = split(line, ';');
-                        Produkt* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], productV[3], stoi(productV[4]), productV[5]);
+                        Produkt* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], (productV[3]), stoi(productV[4]), productV[5]);
                         p->wypisz();
                     }
 
@@ -83,58 +84,61 @@ void menuPrzegladaniaProduktow() {
                     int wybor = -1;
                     while(wybor < 1 || wybor > Headers.size())
                     {
-                        cout << "Filtruj wedlug kategorii: " << endl;
+                        cout << "Sortuj wedlug kategorii: " << endl;
                         for(int i = 2; i < Headers.size(); i++)
                         {
                             cout << (i - 1) << ". " << Headers[i] << endl;
                         }
                         cin >> wybor;
                     }
-                    wybor++;
 
-                    vector<vector<string>> allProducts;
+                    vector<Produkt*> allProducts;
 
-                    cout << "ID" << setw( 20 ) << "| Nazwa\t\t\t\t\t\t| Cena\t\t| Dostepnosc\t| Dodatkowe informacje" << endl;
+
                     while(getline(file, line))
                     {
-                        vector<string> product = split(line, ';');
-                        // wyplenienie bialymi znakami w celu schludniejszego wyswieltenia w konsoli
-                        int len = product[2].length();
-                        int n = 0;
-                        if(stoi(product[0]) < 10)
-                        {
-                            n = 51;
-                        }
-                        else
-                        {
-                            n = 50;
-                        }
-                        for(int j = len; j < n; j++)
-                        {
-                            product[2] += " ";
-                        }
-                        allProducts.push_back(product);
+                        vector<string> productV = split(line, ';');
+                        Produkt* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], (productV[3]), stoi(productV[4]), productV[5]);
+                        allProducts.push_back(p);
                     }
-                    if(wybor == 4 || wybor == 4)
+                    if(wybor == 2)
                     {
                         sort(allProducts.begin(), allProducts.end(),
-                             [wybor](const std::vector<string>& a, const std::vector<string>& b) {
-                                 return stoi(a[wybor]) < stoi(b[wybor]);
+                             [wybor](const Produkt* a, const Produkt* b) {
+                                 return a->getCena() < b->getCena();
+                             });
+                    }
+                    else if(wybor == 1)
+                    {
+                        sort(allProducts.begin(), allProducts.end(),
+                             [wybor](const Produkt* a, const Produkt* b) {
+                                 return a->getNazwa() < b->getNazwa();
+                             });
+                    }
+                    else if(wybor == 3)
+                    {
+                        sort(allProducts.begin(), allProducts.end(),
+                             [wybor](const Produkt* a, const Produkt* b) {
+                                 return a->getDostepnosc() < b->getDostepnosc();
+                             });
+                    }
+                    else if(wybor == 4)
+                    {
+                        sort(allProducts.begin(), allProducts.end(),
+                             [wybor](const Produkt* a, const Produkt* b) {
+                                 return a->getCechaSzczegolna() < b->getCechaSzczegolna();
                              });
                     }
                     else
                     {
-                        sort(allProducts.begin(), allProducts.end(),
-                             [wybor](const std::vector<string>& a, const std::vector<string>& b) {
-                                 return a[wybor] < b[wybor];
-                             });
+                        cout << "Źle wybrany numerek!";
+                        break;
                     }
 
-
+                    cout << "ID" << "| Nazwa" << setw(123) <<" | Cena \t | Dostepnosc \t| Dodatkowe informacje\n" << endl;
                     for(int i = 0; i < allProducts.size(); i++)
                     {
-                        cout << allProducts[i][0] << " | " << allProducts[i][2]  << " | " << allProducts[i][3]  << " \t| " << allProducts[i][4]  << " \t\t| " << allProducts[i][5] << endl;
-
+                        allProducts[i]->wypisz();
                     }
 
                     file.close();
@@ -146,60 +150,50 @@ void menuPrzegladaniaProduktow() {
 
                     fstream file = OpenFile("kategorie.txt");
 
-                    string line, elementy[2];
+                    string line;
                     getline(file, line);
 
                     vector<int> categoryId;
-
                     while(getline(file, line))
                     {
-                        vector<string> categories = split(line, ';');
+                        vector<string> category = split(line, ';');
 
-                        cout << categories[0] << ". " << categories[1] << endl;
-                        categoryId.push_back(stoi(categories[0]));
+                        cout << category[0] << ". " << category[1] << endl;
+                        categoryId.push_back(stoi(category[0]));
                     }
                     file.close();
 
                     int wybor = -1;
                     while(wybor < 1 || wybor > categoryId[categoryId.size() - 1])
                     {
-                        cout << "Wybierz kategorie: (0 - " << categoryId[categoryId.size() - 1] << ")" << "\n";
+                        cout << "Wybierz kategorie: (1 - " << categoryId.size() << ")" << "\n";
                         cin >> wybor;
                     }
+                    wybor--;
 
                     fstream file2 = OpenFile("produkty.txt");
-                    string line2, elementy2[6];
+                    string line2;
                     getline(file2, line2);
 
-                    cout << "ID" << setw( 20 ) << "| Nazwa\t\t\t\t\t\t| Cena\t\t| Dostepnosc\t| Dodatkowe informacje" << endl;
+                    vector<Produkt*> allProducts;
+
+
                     while(getline(file2, line2))
                     {
-                        vector<string> product = split(line2, ';');
-                        // wyplenienie bialymi znakami w celu schludniejszego wyswieltenia w konsoli
-                        int len = product[2].length();
-                        int n = 0;
-                        if(stoi(product[0]) < 10)
+                        vector<string> productV = split(line2, ';');
+                        Produkt* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], (productV[3]), stoi(productV[4]), productV[5]);
+                        if(p->getId_Kategorii() == categoryId[wybor])
                         {
-                            n = 51;
+                            allProducts.push_back(p);
                         }
-                        else
-                        {
-                            n = 50;
-                        }
-                        for(int j = len; j < n; j++)
-                        {
-                            product[2] += " ";
-                        }
-
-                        //wypisywanie
-                        if(stoi(product[1]) == wybor)
-                        {
-                            cout << product[0] << " | " << product[2]  << " | " << product[3]  << " \t| " << product[4]  << " \t\t| " << product[5] << endl;
-                        }
-
+                    }
+                    for(Produkt* p : allProducts)
+                    {
+                        p->wypisz();
                     }
 
-                    file.close();
+
+                    file2.close();
 
                 }
                 break;
