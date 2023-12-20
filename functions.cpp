@@ -3,6 +3,7 @@
 #include "fstream"
 #include "cstring"
 #include "vector"
+#include "klasy/Produkt.h"
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
@@ -59,29 +60,12 @@ void menuPrzegladaniaProduktow() {
                     string line, elementy[6];
                     getline(file, line);
 
-                    cout << "ID" << setw( 20 ) << "| Nazwa\t\t\t\t\t\t| Cena\t\t| Dostepnosc\t| Dodatkowe informacje" << endl;
+                    cout << "ID" << " | Nazwa\t\t\t\t\t\t| Cena\t\t| Dostepnosc\t| Dodatkowe informacje" << endl;
                     while(getline(file, line))
                     {
-                        vector<string> product = split(line, ';');
-                        // wyplenienie bialymi znakami w celu schludniejszego wyswieltenia w konsoli
-                        int len = product[2].length();
-                        int n = 0;
-                        if(stoi(product[0]) < 10)
-                        {
-                            n = 51;
-                        }
-                        else
-                        {
-                            n = 50;
-                        }
-                        for(int j = len; j < n; j++)
-                        {
-                            product[2] += " ";
-                        }
-
-                        //wypisywanie
-                        cout << product[0] << " | " << product[2]  << " | " << product[3]  << " \t| " << product[4]  << " \t\t| " << product[5] << endl;
-
+                        vector<string> productV = split(line, ';');
+                        Produkt* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], productV[3], stoi(productV[4]), productV[5]);
+                        p->wypisz();
                     }
 
                     file.close();
@@ -240,8 +224,26 @@ void menuDodawaniaProduktu() {
 
         switch (wybor) {
             case 1:
+            {
+                int kategoria, ilosc = 0;
                 std::cout << "Dodawanie nowego produktu...\n";
-                // kod
+                cout << "1. Wybierz kategorię produktu\n";
+
+                fstream file = OpenFile("kategorie.txt");
+                string line;
+                getline(file, line);
+
+                while(getline(file, line))
+                {
+                    vector<string> categories = split(line, ';');
+
+                    cout << categories[0] << ". " << categories[1] << endl;
+                    ilosc++;
+                }
+                file.close();
+
+
+            }
                 break;
             case 2:
                 break; // Powrót do menu głównego
