@@ -6,19 +6,20 @@
 #define PROJEKT_PRODUKT_H
 
 
-#include <string>
+#include <iostream>
+#include "SprzetElektroniczny.h"
 
-class Produkt {
-protected:
-    int Id_Produktu;
-    int Id_Kategorii;
-    std::string Nazwa;
-    float Cena;
+using namespace std;
+
+class Produkt : public SprzetElektroniczny{
+private:
+    string Cena;
     int Dostepnosc;
-
+    string CechaSzczegolna;
+    void formatuj();
 public:
-    virtual void wypisz();
-    Produkt();
+    void wypisz();
+    Produkt(int Id_p, int Id_kategorii_p, string Nazwa_p, string Cena_p, int Dostepnosc_p, string CechaSzczegolna_p);
 };
 
 
