@@ -1,13 +1,11 @@
 #include <iostream>
 #include "functions.h"
 #include "fstream"
-#include "cstring"
 #include "vector"
 #include "klasy/Produkt.h"
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
-#include "clocale"
 
 using namespace std;
 
@@ -219,23 +217,38 @@ void menuDodawaniaProduktu() {
         switch (wybor) {
             case 1:
             {
-                int kategoria, ilosc = 0;
-                std::cout << "Dodawanie nowego produktu...\n";
-                cout << "1. Wybierz kategorię produktu\n";
+                int Idp, Idk = -1, Cenap, DostepnoscP;
+                string Nazwap, CechaSzcegolnaP;
 
-                fstream file = OpenFile("kategorie.txt");
+                //Przydzielenie nastepnego Id produktu na podsatwie produktow w pliku
+                fstream file = OpenFile("produkty.txt");
                 string line;
-                getline(file, line);
-
                 while(getline(file, line))
                 {
-                    vector<string> categories = split(line, ';');
+                    //przejscie do ostatniej linijki
+                }
+                Idp = stoi(line.substr(0, line.find(';'))) + 1;
 
-                    cout << categories[0] << ". " << categories[1] << endl;
-                    ilosc++;
+
+                //Wybor kategorii
+                fstream file2 = OpenFile("kategorie.txt");
+                string line2;
+                getline(file2, line2);
+
+                vector<int> categoryId;
+                while(getline(file2, line2))
+                {
+                    vector<string> category = split(line2, ';');
+
+                    cout << category[0] << ". " << category[1] << endl;
+                    categoryId.push_back(stoi(category[0]));
                 }
                 file.close();
-
+                while(Idk < 1 || Idk > categoryId[categoryId.size() - 1])
+                {
+                    cout << "Podaj numer kategorii produktu\n";
+                    cin >> Idk;
+                }
 
             }
                 break;
