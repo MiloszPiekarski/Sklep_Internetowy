@@ -13,7 +13,33 @@ using namespace std;
 #include <vector>
 #include "../fileHelper.h"
 #include <limits>
+#include "regex"
 
+bool sprawdzCene(string C)
+{
+    string r = "^[1-9][0-9]*(.){1}[0-9]{2}$";
+    if(regex_match(C, regex(r)))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool sprawdzDostepnosc(string D)
+{
+    string r = "^[0-9]*$";
+    if(regex_match(D, regex(r)))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 int ilePolskich(const string str) {
     // Convert narrow string to wide string
@@ -122,15 +148,26 @@ bool Produkt::uzupelnijDane()
         this->IDs.Id = Idp;
         this->IDs.Id_Kategorii = Idk;
 
+        string cenaP, dostepnosc;
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        string dostepnosc;
         cout << "Podaj nazwe produktu:\n";
         getline(cin, this->Nazwa);
-        cout << "Podaj cene produktu:\n"; //Cena jako float w postaci XXXX.XX
-        getline(cin, this->Cena);
-        cout << "Podaj dostepnosc produktu:\n"; // int
+        cout << "Podaj cene produktu: (np.: 220.99)\n";
+        getline(cin, cenaP);
+        while(!sprawdzCene(cenaP))
+        {
+            cout << "Podaj poprawną cene produktu: (np.: 220.99)\n"; //Cena jako float w postaci XXXX.XX
+            getline(cin, cenaP);
+        }
+        this->Cena = cenaP;
+        cout << "Podaj dostepnosc produktu:\n";
         getline(cin, dostepnosc);
+        while(!sprawdzDostepnosc(dostepnosc))
+        {
+            cout << "Podaj poprawną dostepność produktu:\n"; // int
+            getline(cin, dostepnosc);
+        }
         this->Dostepnosc = stoi(dostepnosc);
         cout << "Podaj cechę produktu:\n";
         getline(cin, this->CechaSzczegolna);
@@ -152,9 +189,7 @@ bool Produkt::dodajProdukt() {
     plik << produkt;
     plik.close();
 
-
     return true;
-
 }
 
 
