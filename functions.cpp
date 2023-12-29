@@ -1,34 +1,16 @@
 #include <iostream>
 #include "functions.h"
 #include "fstream"
-#include "cstring"
 #include "vector"
 #include "klasy/Produkt.h"
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
-#include "clocale"
+#include "fileHelper.h"
 
 using namespace std;
 
-fstream OpenFile(string path)
-{
-    string fullPath = "..\\dane\\" + path;
-    fstream file;
-    file.open(fullPath);
-    return file;
-}
-vector<string> split(const string &s, char delim) {
-    vector<std::string> result;
-    stringstream ss (s);
-    string item;
 
-    while (getline (ss, item, delim)) {
-        result.push_back (item);
-    }
-
-    return result;
-}
 
 void wyswietlMenuGlowne() {
     std::cout << "Menu Główne:\n";
@@ -219,23 +201,18 @@ void menuDodawaniaProduktu() {
         switch (wybor) {
             case 1:
             {
-                int kategoria, ilosc = 0;
-                std::cout << "Dodawanie nowego produktu...\n";
-                cout << "1. Wybierz kategorię produktu\n";
-
-                fstream file = OpenFile("kategorie.txt");
-                string line;
-                getline(file, line);
-
-                while(getline(file, line))
+                bool wpisano = false;
+                Produkt* pNew = new Produkt();
+                while(!wpisano)
                 {
-                    vector<string> categories = split(line, ';');
-
-                    cout << categories[0] << ". " << categories[1] << endl;
-                    ilosc++;
+                    if(pNew->uzupelnijDane())
+                    {
+                        wpisano = true;
+                    }
                 }
-                file.close();
 
+                pNew->wypisz();
+                pNew->dodajProdukt();
 
             }
                 break;

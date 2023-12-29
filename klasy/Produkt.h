@@ -16,10 +16,17 @@ private:
     string Cena; //STRING DLA ODPOWIEDNIEGO WYSWIETLENIA W KONSOLI
     int Dostepnosc;
     string CechaSzczegolna;
-    void formatuj();
+    string formatujNazwe();
 public:
-    void wypisz();
+    Produkt();
     Produkt(int Id_p, int Id_kategorii_p, string Nazwa_p, string Cena_p, int Dostepnosc_p, string CechaSzczegolna_p);
+
+    void wypisz();
+    bool uzupelnijDane();
+    bool dodajProdukt();
+
+
+    //gettery
     string getNazwa() const;
     float getCena() const;
     int getDostepnosc() const;

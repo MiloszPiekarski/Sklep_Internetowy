@@ -10,5 +10,7 @@ add_executable(projekt main.cpp
         klasy/Produkt.h
         klasy/SprzetElektroniczny.cpp
         klasy/SprzetElektroniczny.h
+        fileHelper.cpp
+        fileHelper.h
 )
 
