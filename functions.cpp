@@ -6,27 +6,11 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include "fileHelper.h"
 
 using namespace std;
 
-fstream OpenFile(string path)
-{
-    string fullPath = "..\\dane\\" + path;
-    fstream file;
-    file.open(fullPath);
-    return file;
-}
-vector<string> split(const string &s, char delim) {
-    vector<std::string> result;
-    stringstream ss (s);
-    string item;
 
-    while (getline (ss, item, delim)) {
-        result.push_back (item);
-    }
-
-    return result;
-}
 
 void wyswietlMenuGlowne() {
     std::cout << "Menu Główne:\n";
@@ -217,38 +201,18 @@ void menuDodawaniaProduktu() {
         switch (wybor) {
             case 1:
             {
-                int Idp, Idk = -1, Cenap, DostepnoscP;
-                string Nazwap, CechaSzcegolnaP;
-
-                //Przydzielenie nastepnego Id produktu na podsatwie produktow w pliku
-                fstream file = OpenFile("produkty.txt");
-                string line;
-                while(getline(file, line))
+                bool wpisano = false;
+                Produkt* pNew = new Produkt();
+                while(!wpisano)
                 {
-                    //przejscie do ostatniej linijki
+                    if(pNew->uzupelnijDane())
+                    {
+                        wpisano = true;
+                    }
                 }
-                Idp = stoi(line.substr(0, line.find(';'))) + 1;
 
-
-                //Wybor kategorii
-                fstream file2 = OpenFile("kategorie.txt");
-                string line2;
-                getline(file2, line2);
-
-                vector<int> categoryId;
-                while(getline(file2, line2))
-                {
-                    vector<string> category = split(line2, ';');
-
-                    cout << category[0] << ". " << category[1] << endl;
-                    categoryId.push_back(stoi(category[0]));
-                }
-                file.close();
-                while(Idk < 1 || Idk > categoryId[categoryId.size() - 1])
-                {
-                    cout << "Podaj numer kategorii produktu\n";
-                    cin >> Idk;
-                }
+                pNew->wypisz();
+                pNew->dodajProdukt();
 
             }
                 break;
