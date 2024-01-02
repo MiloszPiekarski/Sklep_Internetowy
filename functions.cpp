@@ -5,7 +5,14 @@
 #include "vector"
 #include <sstream>
 #include <iomanip>
+#include <ctime>
+#include <map>
 #include <algorithm>
+#include <math.h>
+#include "klasy/Zamowienia.h"
+#include "klasy/Raport.h"
+#include "klasy/Produkt.h"
+#include "klasy/everywhere_functions.h"
 
 using namespace std;
 
@@ -15,17 +22,6 @@ fstream OpenFile(string path)
     fstream file;
     file.open(fullPath);
     return file;
-}
-vector<string> split(const string &s, char delim) {
-    vector<std::string> result;
-    stringstream ss (s);
-    string item;
-
-    while (getline (ss, item, delim)) {
-        result.push_back (item);
-    }
-
-    return result;
 }
 
 void wyswietlMenuGlowne() {
@@ -301,6 +297,72 @@ void menuUsuwanieProduktu() {
     } while (wybor != 2);
 }
 
+
+struct Specyfikacja{
+    std::string nazwa;
+    int ilosc;
+    int cena;
+    int id;
+    Specyfikacja(){
+        cena = 0;
+    }
+};
+
+void zamowienia_do_daty(int wybor, std::vector<Zamowienie> &zamowienia_do_raportu){
+    for(Zamowienie el: Zamowienie::lista_zamowien){
+        if(el.roznica() <= wybor) zamowienia_do_raportu.push_back(el);
+    }
+}
+void Oblicz_przychod(std::vector<Zamowienie> zamowienia_do_raportu, map<int,Specyfikacja> value){
+    Produkt::wczytaj_produkty();
+    for(Zamowienie el: zamowienia_do_raportu){
+        value[el.zwroc_id()].ilosc += el.zwroc_ilosc();
+    }
+    for(Produkt el: Produkt::lista_produktow){
+        try{
+            int index = el.podaj_id();
+            value.at(index);
+            value[index].id = index;
+            value[index].cena = value[index].ilosc * el.podaj_cene();
+            value[index].nazwa = el.podaj_nazwe();
+        }
+        catch(const exception &e){}
+    }
+}
+Raport generuj_raport(int wybor, std::string wybor_str){
+    Zamowienie::wczytaj_zamowienia();
+    vector<Zamowienie> zamowienia_do_raportu;
+    zamowienia_do_daty(wybor,zamowienia_do_raportu);
+    map<int,Specyfikacja> Statystyka;
+    Oblicz_przychod(zamowienia_do_raportu,Statystyka);
+    Specyfikacja *najlepsi = new Specyfikacja[3];
+    int suma = 0;
+    for(auto i = Statystyka.begin(); i != Statystyka.end(); i++){
+        if(i->second.cena > najlepsi[2].cena){
+            if(i->second.cena > najlepsi[1].cena){
+                if(i->second.cena > najlepsi[0].cena){
+                    najlepsi[2] = najlepsi[1];
+                    najlepsi[1] = najlepsi[0];
+                    najlepsi[0] = i->second;
+                }else{
+                    najlepsi[2] = najlepsi[1];
+                    najlepsi[1] = i->second;
+                }
+            }else{
+                najlepsi[2] = i->second;
+            }
+            suma += i->second.cena;
+        }
+
+    }
+    std::cout<<"Raport za ostatnich "<<wybor<<" dni:\n";
+    std::cout<<"Najlepiej sprzedajace się produkty:\n";
+    for(int i=0;i<3;i++)
+        std::cout<<i+1<<"."<<najlepsi[i].nazwa<<" -- "<<najlepsi[i].ilosc<<" sprzedanych sztuk\n";
+    std::cout<<"Laczny obrot w tym okresie wynosil "<<suma<< "zlotych";
+    Raport g(wybor_str,najlepsi[0].nazwa,najlepsi[0].id,suma);
+
+}
 void menuGenerowaniaRaportu() {
     int wybor;
     do {
@@ -311,10 +373,43 @@ void menuGenerowaniaRaportu() {
         std::cin >> wybor;
 
         switch (wybor) {
-            case 1:
-                std::cout << "Wybieranie zakresu czasowego dla raportu...\n";
-                // kod
+            case 1: {
+                system("cls");
+                int wybor_terminu;
+                std::cout<<"Wybierz zakres, dla ktorego chcesz wygenerowac raport ";
+                std::cout << "1. Tydzien\n";
+                std::cout << "2. Miesiac\n";
+                std::cout << "3. Rok\n";
+                std::cout << "\n\n0. Powrót.";
+                std::cin>>wybor_terminu;
+                while(wybor_terminu<1 || wybor_terminu>3){
+                    std::cout<<"Nieprawidlowy wybor. Prosze wybrac licze od 1 do 3";
+                    std::cin>>wybor_terminu;
+                }
+                Raport raport_do_zapisu;
+                switch(wybor){
+                    case 1: {
+                        raport_do_zapisu = generuj_raport(7,"Tydzien");
+                        break;
+                    }
+                    case 2: {
+                        raport_do_zapisu = generuj_raport(31,"Miesiac");
+                        break;
+                    }
+                    case 3: {
+                        raport_do_zapisu = generuj_raport(365,"Rok");
+                        break;
+                    }
+                }
+                char odp;
+                std::cout<<"Czy chcesz zapisac raport? (Y/N): ";
+                std::cin>>odp;
+                if(odp == 'Y'){
+                    Raport::wczytaj_raporty();
+                    raport_do_zapisu.dopisz_do_pliku();
+                }
                 break;
+            }
             case 2:
                 break; // Powrót do menu głównego
             default:
