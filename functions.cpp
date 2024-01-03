@@ -226,29 +226,44 @@ void menuDodawaniaProduktu() {
     } while (wybor != 2);
 }
 
+//milosz
 void menuEdycjiProduktu() {
-    int wybor;
-    do {
-        std::cout << "Menu Edycji Produktu:\n";
-        std::cout << "1. Edytuj istniejący produkt\n";
-        std::cout << "2. Powrót do Menu Głównego\n";
-        std::cout << "Wprowadź swój wybór (1-2): ";
-        std::cin >> wybor;
+    std::cout << "Podaj ID produktu do edycji: ";
+    int idProduktu;
+    std::cin >> idProduktu;
+    std::cin.ignore();
 
-        switch (wybor) {
-            case 1:
-                std::cout << "Edycja istniejącego produktu...\n";
-                // kod
-                break;
-            case 2:
-                break; // Powrót do menu głównego
-            default:
-                std::cout << "Nieprawidłowy wybór. Proszę wprowadzić liczbę od 1 do 2.\n";
-                break;
+    Produkt produkt;
+
+    // Próba wczytania produktu z pliku
+    if (!produkt.wczytajProdukt(idProduktu)) {
+        std::cout << "Produkt o podanym ID nie istnieje." << std::endl;
+        return;
+    }else{
+
+        // Wyświetlenie obecnych danych produktu
+        produkt.wypisz();
+
+        // Zbieranie nowych danych produktu od użytkownika
+        std::string nowaNazwa, nowaCena, nowaDostepnosc, nowaCecha;
+        std::cout << "Podaj nową nazwę produktu (obecna: " << produkt.getNazwa() << "): ";
+        getline(std::cin, nowaNazwa);
+        std::cout << "Podaj nową cenę produktu (obecna: " << produkt.getCena() << "): ";
+        getline(std::cin, nowaCena);
+        std::cout << "Podaj nową dostępność produktu (obecna: " << produkt.getDostepnosc() << "): ";
+        getline(std::cin, nowaDostepnosc);
+        std::cout << "Podaj nową cechę szczególną produktu (obecna: " << produkt.getCechaSzczegolna() << "): ";
+        getline(std::cin, nowaCecha);
+
+        // Aktualizacja danych produktu
+        if (produkt.edytujProdukt(idProduktu, nowaNazwa, nowaCena, nowaDostepnosc, nowaCecha)) {
+            std::cout << "Produkt został pomyślnie zaktualizowany." << std::endl;
+        } else {
+            std::cout << "Nie udało się zaktualizować produktu." << std::endl;
         }
-        std::cout << "\n\n";
-    } while (wybor != 2);
+    }
 }
+//milosz
 
 void menuUsuwanieProduktu() {
     int wybor;
