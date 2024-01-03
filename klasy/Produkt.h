@@ -24,6 +24,8 @@ public:
     void wypisz();
     bool uzupelnijDane();
     bool dodajProdukt();
+    bool wczytajProdukt(int idProduktu); //MILOSZ
+    bool edytujProdukt(int idProduktu, const string& nowaNazwa, const string& nowaCena, const string& nowaDostepnosc, const string& nowaCecha);
 
 
     //gettery

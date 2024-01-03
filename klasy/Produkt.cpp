@@ -7,6 +7,8 @@ using namespace std;
 #include "Produkt.h"
 #include <iostream>
 #include "fstream"
+#include <sstream>
+#include <string>
 #include "iomanip"
 #include <locale>
 #include <codecvt>
@@ -14,6 +16,7 @@ using namespace std;
 #include "../fileHelper.h"
 #include <limits>
 #include "regex"
+#include <filesystem>
 
 bool sprawdzCene(string C)
 {
@@ -191,6 +194,91 @@ bool Produkt::dodajProdukt() {
 
     return true;
 }
+
+//MILOSZ
+bool Produkt::edytujProdukt(int idProduktu, const string& nowaNazwa, const string& nowaCena, const string& nowaDostepnosc, const string& nowaCecha) {
+    vector<string> linie;
+    string linia;
+    ifstream plikWe("../dane/produkty.txt");
+    bool znaleziono = false;
+
+    while (getline(plikWe, linia)) {
+        stringstream ss(linia);
+        string itemId;
+        getline(ss, itemId, ';');
+        itemId.erase(remove_if(itemId.begin(), itemId.end(), ::isspace), itemId.end());
+
+        if (!itemId.empty() && std::all_of(itemId.begin(), itemId.end(), ::isdigit) && stoi(itemId) == idProduktu) {
+            znaleziono = true;
+            string zmodyfikowanaCena = nowaCena.empty() ? this->Cena : nowaCena;
+            string zmodyfikowanaDostepnosc = nowaDostepnosc.empty() ? std::to_string(this->Dostepnosc) : nowaDostepnosc;
+
+            string zmodyfikowanaLinia = to_string(idProduktu) + ";" + to_string(IDs.Id_Kategorii) + ";" + nowaNazwa + ";" + zmodyfikowanaCena + ";" + zmodyfikowanaDostepnosc + ";" + nowaCecha;
+            linie.push_back(zmodyfikowanaLinia);
+            continue;
+        }
+        linie.push_back(linia);
+    }
+    plikWe.close();
+
+    if (!znaleziono) {
+        cout << "Produkt o ID " << idProduktu << " nie został znaleziony." << endl;
+        return false;
+    }
+
+    ofstream plikWy("../dane/produkty.txt");
+    for (const auto& l : linie) {
+        plikWy << l << endl;
+    }
+    plikWy.close();
+
+    return true;
+}
+
+
+bool Produkt::wczytajProdukt(int idProduktu) {
+    std::string sciezkaDoPliku = "../dane/produkty.txt"; // Ustawiamy względną ścieżkę do folderu 'dane'
+    std::fstream plik(sciezkaDoPliku);
+
+    if (!plik.is_open()) {
+        std::cerr << "Nie można otworzyć pliku produkty.txt" << std::endl;
+        return false;
+    }
+
+    std::string linia;
+    while (getline(plik, linia)) {
+        std::stringstream liniaStream(linia);
+        std::string segment;
+        std::vector<std::string> segmenty;
+
+        while(std::getline(liniaStream, segment, ';')) {
+            segmenty.push_back(segment);
+        }
+
+        if (segmenty.size() >= 6) {
+            // Sprawdzanie, czy ID produktu i ID kategorii to liczby
+            if (std::all_of(segmenty[0].begin(), segmenty[0].end(), ::isdigit) &&
+                std::stoi(segmenty[0]) == idProduktu &&
+                std::all_of(segmenty[1].begin(), segmenty[1].end(), ::isdigit)) {
+
+                this->IDs.Id = std::stoi(segmenty[0]);
+                this->IDs.Id_Kategorii = std::stoi(segmenty[1]);
+                this->Nazwa = segmenty[2];
+                this->Cena = segmenty[3]; // Zakładamy, że cena jest przechowywana jako string
+                this->Dostepnosc = std::all_of(segmenty[4].begin(), segmenty[4].end(), ::isdigit) ? std::stoi(segmenty[4]) : 0;
+                this->CechaSzczegolna = segmenty[5];
+                plik.close();
+                return true;
+            }
+        }
+    }
+
+    plik.close();
+    return false; // Produkt nie został znaleziony
+}
+
+
+//MILOSZ
 
 
 
