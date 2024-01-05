@@ -266,27 +266,20 @@ void menuEdycjiProduktu() {
 //milosz
 
 void menuUsuwanieProduktu() {
-    int wybor;
-    do {
-        std::cout << "Menu Usuwania Produktu:\n";
-        std::cout << "1. Usuń istniejący produkt\n";
-        std::cout << "2. Powrót do Menu Głównego\n";
-        std::cout << "Wprowadź swój wybór (1-2): ";
-        std::cin >> wybor;
+    int idProduktu;
+    cout << "Podaj ID produktu do usunięcia (lub 0 aby powrócić do menu głównego): ";
+    cin >> idProduktu;
 
-        switch (wybor) {
-            case 1:
-                std::cout << "Usuwanie istniejącego produktu...\n";
-                // kod
-                break;
-            case 2:
-                break; // Powrót do menu głównego
-            default:
-                std::cout << "Nieprawidłowy wybór. Proszę wprowadzić liczbę od 1 do 2.\n";
-                break;
-        }
-        std::cout << "\n\n";
-    } while (wybor != 2);
+    // Jeśli użytkownik wpisał 0, powrót do menu głównego
+    if (idProduktu == 0) {
+        cout << "Powrót do menu głównego." << endl;
+        return;
+    }
+
+    Produkt produkt;
+    if (!produkt.usunProdukt(idProduktu)) {
+        cout << "Nie udało się usunąć produktu." << endl;
+    }
 }
 
 void menuGenerowaniaRaportu() {

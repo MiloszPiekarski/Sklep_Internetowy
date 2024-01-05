@@ -26,7 +26,7 @@ public:
     bool dodajProdukt();
     bool wczytajProdukt(int idProduktu); //MILOSZ
     bool edytujProdukt(int idProduktu, const string& nowaNazwa, const string& nowaCena, const string& nowaDostepnosc, const string& nowaCecha);
-
+    bool usunProdukt(int idProduktu);
 
     //gettery
     string getNazwa() const;

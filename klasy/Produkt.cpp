@@ -277,6 +277,70 @@ bool Produkt::wczytajProdukt(int idProduktu) {
     return false; // Produkt nie został znaleziony
 }
 
+bool Produkt::usunProdukt(int idProduktu) {
+    vector<string> linie;
+    string linia;
+    ifstream plikWe("../dane/produkty.txt");
+    bool znaleziono = false;
+    string produktDoUsuniecia;
+
+    if (getline(plikWe, linia)) {
+        linie.push_back(linia); // Zachowaj nagłówek
+    }
+
+    while (getline(plikWe, linia)) {
+        stringstream ss(linia);
+        string itemId;
+        getline(ss, itemId, ';');
+        itemId.erase(remove_if(itemId.begin(), itemId.end(), ::isspace), itemId.end());
+
+        if (!itemId.empty() && std::all_of(itemId.begin(), itemId.end(), ::isdigit) && stoi(itemId) == idProduktu) {
+            znaleziono = true;
+            produktDoUsuniecia = linia; // Zapisz informacje o produkcie do usunięcia
+            continue;
+        }
+        linie.push_back(linia);
+    }
+    plikWe.close();
+
+    if (!znaleziono) {
+        cout << "Produkt o ID " << idProduktu << " nie został znaleziony." << endl;
+        return false;
+    }
+
+    // Rozdziel informacje o produkcie i wyświetl z nagłówkami
+    stringstream sstream(produktDoUsuniecia);
+    string pole;
+    vector<string> pola;
+    while (getline(sstream, pole, ';')) {
+        pola.push_back(pole);
+    }
+
+    cout << "ID produktu: " << pola[0] << endl;
+    cout << "ID kategorii: " << pola[1] << endl;
+    cout << "Nazwa: " << pola[2] << endl;
+    cout << "Cena: " << pola[3] << endl;
+    cout << "Dostępność: " << pola[4] << endl;
+    cout << "Cecha: " << pola[5] << endl;
+
+    cout << "Czy na pewno chcesz usunąć ten produkt? (tak/nie): ";
+    string odpowiedz;
+    cin >> odpowiedz;
+    if (odpowiedz != "tak") {
+        cout << "Anulowano usuwanie produktu." << endl;
+        return false;
+    }
+
+    ofstream plikWy("../dane/produkty.txt");
+    for (const auto& l : linie) {
+        plikWy << l << endl;
+    }
+    plikWy.close();
+
+    cout << "Produkt został pomyślnie usunięty." << endl;
+    return true;
+}
+
 
 //MILOSZ
 
