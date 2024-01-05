@@ -228,32 +228,52 @@ void menuDodawaniaProduktu() {
 
 //milosz
 void menuEdycjiProduktu() {
-    std::cout << "Podaj ID produktu do edycji: ";
-    int idProduktu;
-    std::cin >> idProduktu;
-    std::cin.ignore();
+    while (true) {
+        std::cout << "Podaj ID produktu do edycji (lub 0, aby powrócić do menu głównego): ";
+        int idProduktu;
+        std::cin >> idProduktu;
+        std::cin.ignore();
 
-    Produkt produkt;
+        if (idProduktu == 0) {
+            std::cout << "Powrót do menu głównego." << std::endl;
+            break;
+        }
 
-    // Próba wczytania produktu z pliku
-    if (!produkt.wczytajProdukt(idProduktu)) {
-        std::cout << "Produkt o podanym ID nie istnieje." << std::endl;
-        return;
-    }else{
+        Produkt produkt;
+        if (!produkt.wczytajProdukt(idProduktu)) {
+            std::cout << "Produkt o podanym ID nie istnieje." << std::endl;
+            continue;
+        }
 
         // Wyświetlenie obecnych danych produktu
         produkt.wypisz();
+
+        // Zapytanie o potwierdzenie edycji
+        std::cout << "Czy na pewno chcesz edytować ten produkt? (tak/nie): ";
+        std::string potwierdzenie;
+        getline(std::cin, potwierdzenie);
+        if (potwierdzenie != "tak") {
+            std::cout << "Anulowano edycję produktu." << std::endl;
+            continue;
+        }
 
         // Zbieranie nowych danych produktu od użytkownika
         std::string nowaNazwa, nowaCena, nowaDostepnosc, nowaCecha;
         std::cout << "Podaj nową nazwę produktu (obecna: " << produkt.getNazwa() << "): ";
         getline(std::cin, nowaNazwa);
+        nowaNazwa = nowaNazwa.empty() ? produkt.getNazwa() : nowaNazwa;
+
         std::cout << "Podaj nową cenę produktu (obecna: " << produkt.getCena() << "): ";
         getline(std::cin, nowaCena);
+        nowaCena = nowaCena.empty() ? std::to_string(produkt.getCena()) : nowaCena;
+
         std::cout << "Podaj nową dostępność produktu (obecna: " << produkt.getDostepnosc() << "): ";
         getline(std::cin, nowaDostepnosc);
+        nowaDostepnosc = nowaDostepnosc.empty() ? std::to_string(produkt.getDostepnosc()) : nowaDostepnosc;
+
         std::cout << "Podaj nową cechę szczególną produktu (obecna: " << produkt.getCechaSzczegolna() << "): ";
         getline(std::cin, nowaCecha);
+        nowaCecha = nowaCecha.empty() ? produkt.getCechaSzczegolna() : nowaCecha;
 
         // Aktualizacja danych produktu
         if (produkt.edytujProdukt(idProduktu, nowaNazwa, nowaCena, nowaDostepnosc, nowaCecha)) {
@@ -261,8 +281,13 @@ void menuEdycjiProduktu() {
         } else {
             std::cout << "Nie udało się zaktualizować produktu." << std::endl;
         }
+        break;
     }
 }
+
+
+
+
 //milosz
 
 void menuUsuwanieProduktu() {

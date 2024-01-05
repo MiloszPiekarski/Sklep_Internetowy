@@ -108,7 +108,7 @@ void Produkt::wypisz()
 //    cout  << " \t\t\t| " << Dostepnosc  << " \t\t\t| " << CechaSzczegolna << endl;
 
     string nazwaf = this->formatujNazwe();
-    cout << IDs.Id << " | " << nazwaf << " | " << Cena << "\t | " << Dostepnosc  << "\t\t\t| " << CechaSzczegolna << endl;
+    cout <<"Id: " << IDs.Id << " | " <<"Nazwa: "<< nazwaf << " | "<<"Cena: " << Cena << "\t | "<<"Dostepność: " << Dostepnosc  <<" | Cecha: "<< CechaSzczegolna << endl;
 
 }
 
