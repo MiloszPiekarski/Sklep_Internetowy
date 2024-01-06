@@ -235,7 +235,7 @@ void menuEdycjiProduktu() {
         std::cin.ignore();
 
         if (idProduktu == 0) {
-            std::cout << "Powrót do menu głównego." << std::endl;
+            std::cout << "Powrót do menu głównego (naciśnij 'Enter')." << std::endl;
             break;
         }
 
@@ -278,7 +278,7 @@ void menuEdycjiProduktu() {
 
         // Aktualizacja danych produktu
         if (produkt.edytujProdukt(idProduktu, nowaNazwa, nowaCena, nowaDostepnosc, nowaCecha)) {
-            std::cout << "Produkt został pomyślnie zaktualizowany." << std::endl;
+            std::cout << "Produkt został pomyślnie zaktualizowany (naciśnij 'Enter')." << std::endl;
         } else {
             std::cout << "Nie udało się zaktualizować produktu." << std::endl;
         }

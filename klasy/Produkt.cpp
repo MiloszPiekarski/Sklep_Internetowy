@@ -215,9 +215,9 @@ bool Produkt::edytujProdukt(int idProduktu, const string& nowaNazwa, const strin
 
             string zmodyfikowanaLinia = to_string(idProduktu) + ";" + to_string(IDs.Id_Kategorii) + ";" + nowaNazwa + ";" + zmodyfikowanaCena + ";" + zmodyfikowanaDostepnosc + ";" + nowaCecha;
             linie.push_back(zmodyfikowanaLinia);
-            continue;
+        } else {
+            linie.push_back(linia);
         }
-        linie.push_back(linia);
     }
     plikWe.close();
 
@@ -227,8 +227,11 @@ bool Produkt::edytujProdukt(int idProduktu, const string& nowaNazwa, const strin
     }
 
     ofstream plikWy("../dane/produkty.txt");
-    for (const auto& l : linie) {
-        plikWy << l << endl;
+    for (size_t i = 0; i < linie.size(); i++) {
+        plikWy << linie[i];
+        if (i < linie.size() - 1) {
+            plikWy << endl;
+        }
     }
     plikWy.close();
 
@@ -332,17 +335,17 @@ bool Produkt::usunProdukt(int idProduktu) {
     }
 
     ofstream plikWy("../dane/produkty.txt");
-    for (const auto& l : linie) {
-        plikWy << l << endl;
+    for (size_t i = 0; i < linie.size(); i++) {
+        plikWy << linie[i];
+        if (i < linie.size() - 1) { // Kontrola, aby nie dodawać nowej linii po ostatniej linii
+            plikWy << endl;
+        }
     }
     plikWy.close();
 
     cout << "Produkt został pomyślnie usunięty." << endl;
     return true;
 }
-
-
-//MILOSZ
 
 
 
