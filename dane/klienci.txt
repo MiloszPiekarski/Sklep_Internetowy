@@ -9,4 +9,3 @@ ID_Klienta;Imie;Nazwisko;Miasto;Ulica_numer;Email
 8;Maria;Wojciechowska;Szczecin;Słowiański_2;maria.wojciechowska@email.com
 9;Marcin;Szymański;Katowice;Polna_11;marcin.szymanski@email.com
 10;Zofia;Kowalczyk;Bydgoszcz;Zielona_4;zofia.kowalczyk@email.com
-

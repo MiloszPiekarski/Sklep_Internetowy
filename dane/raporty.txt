@@ -9,4 +9,3 @@ ID_Raportu;Data_Generacji;Zakres_Czasowy;Najlepszy_Produkt;ID_Produktu;Dochód
 8;2023-08-30;Ostatni Miesiąc;Klawiatura Razer BlackWidow Elite;3;180.00
 9;2023-09-14;Ostatni Rok;Monitor Dell Ultrasharp U2719D;8;600.00
 10;2023-10-05;Ostatni Tydzień;Głośniki Bose SoundLink Revolve;9;250.00
-
