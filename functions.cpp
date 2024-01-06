@@ -246,6 +246,7 @@ void menuEdycjiProduktu() {
         }
 
         // Wyświetlenie obecnych danych produktu
+        cout << "ID " << "| Nazwa" << setw(123) <<" |  Cena \t | Dostepnosc \t| Dodatkowe informacje\n" << endl;
         produkt.wypisz();
 
         // Zapytanie o potwierdzenie edycji
