@@ -195,7 +195,6 @@ bool Produkt::dodajProdukt() {
     return true;
 }
 
-//MILOSZ
 bool Produkt::edytujProdukt(int idProduktu, const string& nowaNazwa, const string& nowaCena, const string& nowaDostepnosc, const string& nowaCecha) {
     vector<string> linie;
     string linia;
@@ -374,7 +373,3 @@ int Produkt::getId_Kategorii() const
 {
     return IDs.Id_Kategorii;
 }
-
-
-
-

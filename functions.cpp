@@ -226,7 +226,7 @@ void menuDodawaniaProduktu() {
     } while (wybor != 2);
 }
 
-//milosz
+
 void menuEdycjiProduktu() {
     while (true) {
         std::cout << "Podaj ID produktu do edycji (lub 0, aby powrócić do menu głównego): ";
@@ -286,10 +286,6 @@ void menuEdycjiProduktu() {
     }
 }
 
-
-
-
-//milosz
 
 void menuUsuwanieProduktu() {
     int idProduktu;
