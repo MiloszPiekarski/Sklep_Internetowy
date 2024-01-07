@@ -1,0 +1,3 @@
+C:/Users/monik/Desktop/Nowy folder/cmake-build-debug/CMakeFiles/projekt.dir
+C:/Users/monik/Desktop/Nowy folder/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/monik/Desktop/Nowy folder/cmake-build-debug/CMakeFiles/rebuild_cache.dir

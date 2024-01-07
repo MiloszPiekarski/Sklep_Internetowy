@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "SprzetElektroniczny.h"
-
+#include <vector>
 using namespace std;
 
 class Produkt : public SprzetElektroniczny{
@@ -20,6 +20,11 @@ private:
 public:
     Produkt();
     Produkt(int Id_p, int Id_kategorii_p, string Nazwa_p, string Cena_p, int Dostepnosc_p, string CechaSzczegolna_p);
+
+    static std::vector<Produkt> lista_produktow;
+    static void wczytaj_produkty();
+    static void wypisz_liste();
+
 
     void wypisz();
     bool uzupelnijDane();

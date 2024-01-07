@@ -7,7 +7,11 @@
 #include <iomanip>
 #include <algorithm>
 #include "fileHelper.h"
-
+#include "klasy/kategorie.h"
+#include "klasy/klient.h"
+#include "klasy/Zamowienia.h"
+#include "klasy/Raport.h"
+#include <map>
 using namespace std;
 
 
@@ -304,6 +308,72 @@ void menuUsuwanieProduktu() {
     }
 }
 
+struct Specyfikacja{
+    std::string nazwa;
+    int ilosc;
+    float cena;
+    int id;
+    Specyfikacja(){
+        ilosc = 0;
+        cena = 0;
+    }
+};
+void zamowienia_do_daty(int wybor, std::vector<Zamowienie> &zamowienia_do_raportu){
+    for(Zamowienie el: Zamowienie::lista_zamowien){
+        if(el.roznica() <= wybor) zamowienia_do_raportu.push_back(el);
+    }
+}
+void Oblicz_przychod(std::vector<Zamowienie> zamowienia_do_raportu, map<int,Specyfikacja> &value){
+    Produkt::wczytaj_produkty();
+    for(Zamowienie el: zamowienia_do_raportu){
+        value[el.zwroc_id()].ilosc += el.zwroc_ilosc();
+    }
+    for(Produkt el: Produkt::lista_produktow){
+        try{
+            int index = el.GetId();
+            value.at(index);
+            value[index].id = index;
+            value[index].cena = (float)value[index].ilosc * el.getCena();
+            value[index].nazwa = el.getNazwa();
+        }
+        catch(const exception &e){}
+    }
+}
+Raport generuj_raport(int wybor, std::string wybor_str){
+    Zamowienie::wczytaj_zamowienia();
+    vector<Zamowienie> zamowienia_do_raportu;
+    zamowienia_do_daty(wybor,zamowienia_do_raportu);
+    map<int,Specyfikacja> Statystyka;
+    Oblicz_przychod(zamowienia_do_raportu,Statystyka);
+    Specyfikacja *najlepsi = new Specyfikacja[3];
+    float suma = 0;
+    for(auto i = Statystyka.begin(); i != Statystyka.end(); i++){
+        if(i->second.ilosc > najlepsi[2].ilosc){
+            if(i->second.ilosc > najlepsi[1].ilosc){
+                if(i->second.ilosc > najlepsi[0].ilosc){
+                    najlepsi[2] = najlepsi[1];
+                    najlepsi[1] = najlepsi[0];
+                    najlepsi[0] = i->second;
+                }else{
+                    najlepsi[2] = najlepsi[1];
+                    najlepsi[1] = i->second;
+                }
+            }else{
+                najlepsi[2] = i->second;
+            }
+            suma += i->second.cena;
+        }
+
+    }
+    std::cout<<"Raport za ostatnich "<<wybor<<" dni:\n";
+    std::cout<<"Najlepiej sprzedajace sie produkty:\n";
+    for(int i=0;i<3;i++)
+        najlepsi[i].ilosc > 0 ? std::cout<<i+1<<"."<<najlepsi[i].nazwa<<" -- "<<najlepsi[i].ilosc<<" sprzedanych sztuk\n":std::cout<<"";
+    std::cout<<"Laczny obrot w tym okresie wynosil "<<suma<< " zlotych\n";
+    Raport::wczytaj_raporty();
+    Raport g(wybor_str,najlepsi[0].nazwa,najlepsi[0].id,suma);
+    return g;
+}
 void menuGenerowaniaRaportu() {
     int wybor;
     do {
@@ -314,10 +384,41 @@ void menuGenerowaniaRaportu() {
         std::cin >> wybor;
 
         switch (wybor) {
-            case 1:
-                std::cout << "Wybieranie zakresu czasowego dla raportu...\n";
-                // kod
+            case 1: {
+                int wybor_terminu;
+                std::cout<<"Wybierz zakres, dla ktorego chcesz wygenerowac raport \n";
+                std::cout << "1. Tydzien\n";
+                std::cout << "2. Miesiac\n";
+                std::cout << "3. Rok\n";
+                std::cout << "\n\n0. Powrót.";
+                std::cin>>wybor_terminu;
+                while(wybor_terminu<1 || wybor_terminu>3){
+                    std::cout<<"Nieprawidlowy wybor. Prosze wybrac licze od 1 do 3";
+                    std::cin>>wybor_terminu;
+                }
+                Raport raport_do_zapisu;
+                switch(wybor_terminu){
+                    case 1: {
+                        raport_do_zapisu = generuj_raport(7,"Tydzien");
+                        break;
+                    }
+                    case 2: {
+                        raport_do_zapisu = generuj_raport(31,"Miesiac");
+                        break;
+                    }
+                    case 3: {
+                        raport_do_zapisu = generuj_raport(365,"Rok");
+                        break;
+                    }
+                }
+                char odp;
+                std::cout<<"Czy chcesz zapisac raport? (Y/N): ";
+                std::cin>>odp;
+                if(odp == 'Y'){
+                    raport_do_zapisu.dopisz_do_pliku();
+                }
                 break;
+            }
             case 2:
                 break; // Powrót do menu głównego
             default:
@@ -335,44 +436,63 @@ void menuOdczytuZBazyDanych() {
         std::cout << "1. Produkty\n";
         std::cout << "2. Kategorie\n";
         std::cout << "3. Zamówienia\n";
-        std::cout << "4. Pozycje Zamówień\n";
-        std::cout << "5. Klienci\n";
-        std::cout << "6. Raporty\n";
-        std::cout << "7. Powrót do Menu Głównego\n";
-        std::cout << "Wprowadź swój wybór (1-7): ";
+        std::cout << "4. Klienci\n";
+        std::cout << "5. Raporty\n";
+        std::cout << "6. Powrót do Menu Głównego\n";
+        std::cout << "Wprowadź swój wybór (1-6): ";
         std::cin >> wybor;
 
         switch (wybor) {
-            case 1:
+            case 1: {
                 std::cout << "Odczyt z tabeli Produkty...\n";
-                // kod
+                Produkt::wczytaj_produkty();
+                Produkt::wypisz_liste();
+                std::cout<<"\nKliknij dowolny przycisk by kontynuowac...";
+                system("pause");
                 break;
-            case 2:
+            }
+            case 2:{
                 std::cout << "Odczyt z tabeli Kategorie...\n";
-                // kod
+                kategoria::wczytaj_kategorie();
+                std::cout<<"Id Kategorii | Nazwa \n";
+                kategoria::wypisz_liste();
+                std::cout<<"\nKliknij dowolny przycisk by kontynuowac...";
+                system("pause");
                 break;
-            case 3:
+            }
+            case 3: {
                 std::cout << "Odczyt z tabeli Zamówienia...\n";
-                // kod
+                Zamowienie::wczytaj_zamowienia();
+                std::cout<<"Id Zamowienia | Data Zamowienia "<<"| Id Klienta | Id Produktu | Ilosc\n";
+                Zamowienie::wypisz_liste();
+                std::cout<<"\nKliknij dowolny przycisk by kontynuowac...";
+                system("pause");
                 break;
-            case 4:
-                std::cout << "Odczyt z tabeli Pozycje Zamówień...\n";
-                // kod
-                break;
-            case 5:
+            }
+            case 4: {
                 std::cout << "Odczyt z tabeli Klienci...\n";
-                // kod
+                Klient::wczytaj_klientow();
+                std::cout<<"Id Klienta | Imie         | Nazwisko        | Miasto       | Adres                  | Email\n";
+                Klient::wypisz_liste();
+                std::cout<<"\nKliknij dowolny przycisk by kontynuowac...";
+                system("pause");
                 break;
-            case 6:
+            }
+            case 5: {
                 std::cout << "Odczyt z tabeli Raporty...\n";
-                // kod
+                Raport::wczytaj_raporty();
+                std::cout<<"Id Raportu | Data Generowania | Zakres Czasowy         | Najlepszy Produkt                     | Id Produktu | Dochód \n";
+                Raport::wypisz_liste();
+                std::cout<<"\nKliknij dowolny przycisk by kontynuowac...";
+                system("pause");
                 break;
-            case 7:
+            }
+            case 6:
                 break; // Powrót do menu głównego
             default:
-                std::cout << "Nieprawidłowy wybór. Proszę wprowadzić liczbę od 1 do 7.\n";
+                std::cout << "Nieprawidłowy wybór. Proszę wprowadzić liczbę od 1 do 6.\n";
                 break;
         }
         std::cout << "\n\n";
-    } while (wybor != 7);
+    } while (wybor != 6);
 }

@@ -17,6 +17,7 @@ using namespace std;
 #include <limits>
 #include "regex"
 #include <filesystem>
+#include "everywhere_functions.h"
 
 bool sprawdzCene(string C)
 {
@@ -43,6 +44,32 @@ bool sprawdzDostepnosc(string D)
         return false;
     }
 }
+
+vector<Produkt> Produkt::lista_produktow;
+
+void Produkt::wczytaj_produkty() {
+    if(!lista_produktow.empty()){
+        return;
+    }
+    std::string path = "..\\dane\\produkty.txt";
+    std::fstream file;
+    file.open(path.c_str(), std::ios::in);
+    std::string line = "";
+    getline(file,line);
+    while(getline(file,line)){
+        std::vector<std::string> info = split(line,';');
+        Produkt object(stringtoint(info[0]), stringtoint(info[1]),info[2], info[3],stringtoint(info[4]),info[5]);
+        lista_produktow.push_back(object);
+    }
+    file.close();
+}
+
+void Produkt::wypisz_liste() {
+    for(Produkt el: lista_produktow){
+        el.wypisz();
+    }
+}
+
 
 int ilePolskich(const string str) {
     // Convert narrow string to wide string

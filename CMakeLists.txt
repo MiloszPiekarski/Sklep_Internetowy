@@ -12,5 +12,13 @@ add_executable(projekt main.cpp
         klasy/SprzetElektroniczny.h
         fileHelper.cpp
         fileHelper.h
+        klasy/everywhere_functions.h
+        klasy/everywhere_functions.cpp
+        klasy/Raport.cpp
+        klasy/Raport.h
+        klasy/Zamowienia.cpp
+        klasy/Zamowienia.h
+        klasy/kategorie.cpp
+        klasy/klient.cpp
 )
 
