@@ -178,11 +178,17 @@ bool Produkt::uzupelnijDane()
         this->IDs.Id = Idp;
         this->IDs.Id_Kategorii = Idk;
 
-        string cenaP, dostepnosc;
+        string cenaP, dostepnosc, nazwaP, cechaP;
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "Podaj nazwe produktu:\n";
-        getline(cin, this->Nazwa);
+        getline(cin, nazwaP);
+        while(nazwaP == "")
+        {
+            cout << "Podaj poprawną nazwe produktu:\n";
+            getline(cin, nazwaP);
+        }
+        this->Nazwa = nazwaP;
         cout << "Podaj cene produktu: (np.: 220.99)\n";
         getline(cin, cenaP);
         while(!sprawdzCene(cenaP))
@@ -200,7 +206,13 @@ bool Produkt::uzupelnijDane()
         }
         this->Dostepnosc = stoi(dostepnosc);
         cout << "Podaj cechę produktu:\n";
-        getline(cin, this->CechaSzczegolna);
+        getline(cin, cechaP);
+        while(cechaP == "")
+        {
+            cout << "Podaj poprawną cechę produktu:\n";
+            getline(cin, cechaP);
+        }
+        this->CechaSzczegolna = cechaP;
     }
     catch(exception &e)
     {
