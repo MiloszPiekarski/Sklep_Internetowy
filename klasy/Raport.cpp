@@ -44,7 +44,7 @@ void Raport::dopisz_do_pliku() {
     std::fstream file;
     std::string path = "../dane/raporty.txt";
     file.open(path.c_str(), std::ios::app);
-    std::string linijka = inttostring(this->id_raportu) + ";" + this->data + ";" + this->zakres_czasowy + ";" + this->najlepszy_produkt + ";" +
+    std::string linijka = "\n" + inttostring(this->id_raportu) + ";" + this->data + ";" + this->zakres_czasowy + ";" + this->najlepszy_produkt + ";" +
             inttostring(this->id_produktu) + ";" + inttostring_zz(this->dochod);
     file.write(&linijka[0],linijka.length());
     file.close();

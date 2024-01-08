@@ -250,9 +250,8 @@ void menuEdycjiProduktu() {
         }
 
         // Wyświetlenie obecnych danych produktu
-        cout << left << setw(10) << "ID " << "| " << setw(50) << "Nazwa" << " | " << setw(15) << "Cena" << " | " << setw(15) << "Dostepnosc" << " | " << setw(30) << "Dodatkowe informacje" << endl;
-
-        produkt.wypisz2();
+        cout << "ID " << "| Nazwa" << setw(123) <<" |  Cena \t | Dostepnosc \t| Dodatkowe informacje\n" << endl;
+        produkt.wypisz();
 
         // Zapytanie o potwierdzenie edycji
         std::cout << "Czy na pewno chcesz edytować ten produkt? (tak/nie): ";
@@ -305,7 +304,6 @@ void menuUsuwanieProduktu() {
 
     Produkt produkt;
     if (!produkt.usunProdukt(idProduktu)) {
-        cout << "Przepraszam. ";
         cout << "Nie udało się usunąć produktu." << endl;
     }
 }
