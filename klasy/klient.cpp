@@ -1,7 +1,7 @@
 //
 // Created by monik on 04.01.2024.
 //
-#include "Klient.h"
+#include "klient.h"
 #include "everywhere_functions.h"
 #include "../fileHelper.h"
 #include <fstream>

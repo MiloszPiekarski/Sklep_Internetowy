@@ -139,6 +139,10 @@ void Produkt::wypisz()
 
 }
 
+void Produkt::wypisz2() {
+    cout << left << setw(10) << IDs.Id << "| " << setw(50) << Nazwa << " | " << setw(15) << Cena << " | " << setw(15) << Dostepnosc << " | " << setw(30) << CechaSzczegolna << endl;
+}
+
 bool Produkt::uzupelnijDane()
 {
     int Idp, Idk = -1;

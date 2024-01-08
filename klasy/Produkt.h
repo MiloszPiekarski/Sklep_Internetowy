@@ -27,6 +27,7 @@ public:
 
 
     void wypisz();
+    void wypisz2();
     bool uzupelnijDane();
     bool dodajProdukt();
     bool wczytajProdukt(int idProduktu);
