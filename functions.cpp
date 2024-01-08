@@ -305,6 +305,7 @@ void menuUsuwanieProduktu() {
 
     Produkt produkt;
     if (!produkt.usunProdukt(idProduktu)) {
+        cout << "Przepraszam. ";
         cout << "Nie udało się usunąć produktu." << endl;
     }
 }
