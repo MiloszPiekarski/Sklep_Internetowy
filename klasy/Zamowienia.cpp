@@ -89,19 +89,30 @@ void Zamowienie::wczytaj_zamowienia() {
     file.close();
 }
 
+std::vector<Zamowienie> Zamowienie::find_pot_orders(int pot) {
+    Zamowienie::wczytaj_zamowienia();
+    std::vector<Zamowienie> pot_orders;
+    for(Zamowienie el: lista_zamowien){
+        if(el.roznica() <= pot) pot_orders.push_back(el);
+    }
+    lista_zamowien.clear();
+    return pot_orders;
+}
+
 int Zamowienie::roznica() {
-    date dzis;
+    date *dzis = new date;
     int roznica_dzien = 0;
     int roznica_miesiac = 0;
-    int roznica_rok = dzis.podaj(3) - this->data_zamowienia->podaj(3);
+    int roznica_rok = dzis->podaj(3) - this->data_zamowienia->podaj(3);
     if (roznica_rok > 0) {
         roznica_miesiac = roznica_rok * 12;
     }
-    roznica_miesiac = roznica_miesiac + (dzis.podaj(2) - this->data_zamowienia->podaj(2));
-    if (roznica_miesiac > 0) { //pierdole te kurewskie przestepne miesiace, licze kazdy jako 30,5 i zaokraglam w dol.
+    roznica_miesiac = roznica_miesiac + (dzis->podaj(2) - this->data_zamowienia->podaj(2));
+    if (roznica_miesiac > 0) {
         roznica_dzien = floor(roznica_miesiac * 30.5);
     }
-    roznica_dzien = roznica_dzien +(dzis.podaj(1) - this->data_zamowienia->podaj(1));
+    roznica_dzien = roznica_dzien +(dzis->podaj(1) - this->data_zamowienia->podaj(1));
+    delete dzis;
     return roznica_dzien;
 }
 void Zamowienie::wypisz() {
