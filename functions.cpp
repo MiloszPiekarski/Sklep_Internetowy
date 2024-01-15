@@ -9,8 +9,9 @@
 #include "fileHelper.h"
 #include "klasy/kategorie.h"
 #include "klasy/klient.h"
-#include "klasy/Zamowienia.h"
 #include "klasy/Raport.h"
+#include "klasy/Zamowienia.h"
+#include "klasy/Produkt.h"
 #include <map>
 using namespace std;
 
@@ -51,7 +52,7 @@ void menuPrzegladaniaProduktow() {
                     while(getline(file, line))
                     {
                         vector<string> productV = split(line, ';');
-                        SprzetElektroniczny* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], (productV[3]), stoi(productV[4]), productV[5]);
+                        Produkt* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], (productV[3]), stoi(productV[4]), productV[5]);
                         p->wypisz();
                     }
 
@@ -308,72 +309,6 @@ void menuUsuwanieProduktu() {
     }
 }
 
-struct Specyfikacja{
-    std::string nazwa;
-    int ilosc;
-    float cena;
-    int id;
-    Specyfikacja(){
-        ilosc = 0;
-        cena = 0;
-    }
-};
-void zamowienia_do_daty(int wybor, std::vector<Zamowienie> &zamowienia_do_raportu){
-    for(Zamowienie el: Zamowienie::lista_zamowien){
-        if(el.roznica() <= wybor) zamowienia_do_raportu.push_back(el);
-    }
-}
-void Oblicz_przychod(std::vector<Zamowienie> zamowienia_do_raportu, map<int,Specyfikacja> &value){
-    Produkt::wczytaj_produkty();
-    for(Zamowienie el: zamowienia_do_raportu){
-        value[el.zwroc_id()].ilosc += el.zwroc_ilosc();
-    }
-    for(Produkt el: Produkt::lista_produktow){
-        try{
-            int index = el.GetId();
-            value.at(index);
-            value[index].id = index;
-            value[index].cena = (float)value[index].ilosc * el.getCena();
-            value[index].nazwa = el.getNazwa();
-        }
-        catch(const exception &e){}
-    }
-}
-Raport generuj_raport(int wybor, std::string wybor_str){
-    Zamowienie::wczytaj_zamowienia();
-    vector<Zamowienie> zamowienia_do_raportu;
-    zamowienia_do_daty(wybor,zamowienia_do_raportu);
-    map<int,Specyfikacja> Statystyka;
-    Oblicz_przychod(zamowienia_do_raportu,Statystyka);
-    Specyfikacja *najlepsi = new Specyfikacja[3];
-    float suma = 0;
-    for(auto i = Statystyka.begin(); i != Statystyka.end(); i++){
-        if(i->second.ilosc > najlepsi[2].ilosc){
-            if(i->second.ilosc > najlepsi[1].ilosc){
-                if(i->second.ilosc > najlepsi[0].ilosc){
-                    najlepsi[2] = najlepsi[1];
-                    najlepsi[1] = najlepsi[0];
-                    najlepsi[0] = i->second;
-                }else{
-                    najlepsi[2] = najlepsi[1];
-                    najlepsi[1] = i->second;
-                }
-            }else{
-                najlepsi[2] = i->second;
-            }
-            suma += i->second.cena;
-        }
-
-    }
-    std::cout<<"Raport za ostatnich "<<wybor<<" dni:\n";
-    std::cout<<"Najlepiej sprzedajace sie produkty:\n";
-    for(int i=0;i<3;i++)
-        najlepsi[i].ilosc > 0 ? std::cout<<i+1<<"."<<najlepsi[i].nazwa<<" -- "<<najlepsi[i].ilosc<<" sprzedanych sztuk\n":std::cout<<"";
-    std::cout<<"Laczny obrot w tym okresie wynosil "<<suma<< " zlotych\n";
-    Raport::wczytaj_raporty();
-    Raport g(wybor_str,najlepsi[0].nazwa,najlepsi[0].id,suma);
-    return g;
-}
 void menuGenerowaniaRaportu() {
     int wybor;
     do {
@@ -396,18 +331,18 @@ void menuGenerowaniaRaportu() {
                     std::cout<<"Nieprawidlowy wybor. Prosze wybrac licze od 1 do 3";
                     std::cin>>wybor_terminu;
                 }
-                Raport raport_do_zapisu;
+                Raport *raport_do_zapisu = new Raport;
                 switch(wybor_terminu){
                     case 1: {
-                        raport_do_zapisu = generuj_raport(7,"Tydzien");
+                        raport_do_zapisu->generuj_raport(7,"Tydzien");
                         break;
                     }
                     case 2: {
-                        raport_do_zapisu = generuj_raport(31,"Miesiac");
+                        raport_do_zapisu->generuj_raport(31,"Miesiac");
                         break;
                     }
                     case 3: {
-                        raport_do_zapisu = generuj_raport(365,"Rok");
+                        raport_do_zapisu->generuj_raport(365,"Rok");
                         break;
                     }
                 }
@@ -415,7 +350,9 @@ void menuGenerowaniaRaportu() {
                 std::cout<<"Czy chcesz zapisac raport? (Y/N): ";
                 std::cin>>odp;
                 if(odp == 'Y'){
-                    raport_do_zapisu.dopisz_do_pliku();
+                    raport_do_zapisu->dopisz_do_pliku();
+                }else{
+                    Raport::id--;
                 }
                 break;
             }

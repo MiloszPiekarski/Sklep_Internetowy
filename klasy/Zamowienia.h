@@ -1,3 +1,7 @@
+
+
+#ifndef PROJEKT_ZAMOWIENIA_H
+#define PROJEKT_ZAMOWIENIA_H
 #include <iostream>
 #include <math.h>
 #include <vector>
@@ -5,7 +9,6 @@
 #include <fstream>
 #include "everywhere_functions.h"
 #include <optional>
-
 class Zamowienie{
 private:
     int id_klienta;
@@ -30,5 +33,7 @@ public:
     int zwroc_ilosc();
     int roznica();
     void wypisz();
+    static  std::vector<Zamowienie> find_pot_orders(int pot);
     static void wypisz_liste();
 };
+#endif
