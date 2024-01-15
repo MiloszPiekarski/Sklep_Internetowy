@@ -52,7 +52,7 @@ void menuPrzegladaniaProduktow() {
                     while(getline(file, line))
                     {
                         vector<string> productV = split(line, ';');
-                        Produkt* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], (productV[3]), stoi(productV[4]), productV[5]);
+                        SprzetElektroniczny* p = new Produkt(stoi(productV[0]), stoi(productV[1]), productV[2], (productV[3]), stoi(productV[4]), productV[5]);
                         p->wypisz();
                     }
 
